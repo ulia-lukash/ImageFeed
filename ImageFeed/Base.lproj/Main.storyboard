@@ -38,7 +38,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="riF-R8-3fG" userLabel="LikeButton">
-                                                    <rect key="frame" x="309" y="0.0" width="42" height="42"/>
+                                                    <rect key="frame" x="317" y="4" width="42" height="42"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="like_button_on"/>
                                                 </button>
@@ -52,12 +52,12 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="2IA-HF-IlW" firstAttribute="top" secondItem="byT-UY-gC5" secondAttribute="top" constant="4" id="7zW-su-6CD"/>
-                                                <constraint firstItem="2IA-HF-IlW" firstAttribute="trailing" secondItem="riF-R8-3fG" secondAttribute="trailing" constant="8" id="Dgr-IL-040"/>
                                                 <constraint firstItem="64f-lH-ddG" firstAttribute="leading" secondItem="2IA-HF-IlW" secondAttribute="leading" constant="8" id="FR9-BD-3e5"/>
                                                 <constraint firstItem="2IA-HF-IlW" firstAttribute="bottom" secondItem="64f-lH-ddG" secondAttribute="bottom" constant="8" id="Vzu-G2-iyj"/>
+                                                <constraint firstItem="2IA-HF-IlW" firstAttribute="trailing" secondItem="riF-R8-3fG" secondAttribute="trailing" id="Ww6-fM-M4e"/>
                                                 <constraint firstAttribute="trailing" secondItem="2IA-HF-IlW" secondAttribute="trailing" constant="16" id="bQz-7Q-bWe"/>
                                                 <constraint firstAttribute="bottom" secondItem="2IA-HF-IlW" secondAttribute="bottom" constant="4" id="cwz-Qh-Gzv"/>
-                                                <constraint firstItem="riF-R8-3fG" firstAttribute="top" secondItem="byT-UY-gC5" secondAttribute="top" id="feh-k7-Zj2"/>
+                                                <constraint firstItem="riF-R8-3fG" firstAttribute="top" secondItem="2IA-HF-IlW" secondAttribute="top" id="feh-k7-Zj2"/>
                                                 <constraint firstItem="2IA-HF-IlW" firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="64f-lH-ddG" secondAttribute="trailing" constant="8" id="kxZ-mC-yrc"/>
                                                 <constraint firstItem="2IA-HF-IlW" firstAttribute="leading" secondItem="byT-UY-gC5" secondAttribute="leading" constant="16" id="m5O-Ph-H9f"/>
                                             </constraints>
