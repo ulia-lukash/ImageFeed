@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "like_button_on.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "like_button_on@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "like_button_on@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "Active.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
