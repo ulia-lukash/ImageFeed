@@ -100,10 +100,9 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
             switch result {
                 case .success(let profile):
 // - TODO: вообще вот тут должен, наверное, вызываться метод добычи урлы аватарки, но что-то как-то моторчик не фыр-фыр
-                print(profile)
-                
 //                self?.profileImageService.fetchProfileImageURL(username: profile.username) { _ in }
-                case .failure(let error):
+            print(profile)
+            case .failure(let error):
                     self?.showAlertProfile(with: error)
                     break
             }
