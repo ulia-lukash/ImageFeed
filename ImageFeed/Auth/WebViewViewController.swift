@@ -8,12 +8,15 @@
 import Foundation
 import UIKit
 import WebKit
+import SwiftKeychainWrapper
 
 
 final class WebViewViewController: UIViewController {
 
     let authService = OAuth2Service()
-    let storage = OAuth2TokenStorage()
+    let profileService = ProfileService.shared
+    static let shared = WebViewViewController()
+
     
     @IBOutlet private var webView: WKWebView!
     @IBAction private func didTapBackButton(_ sender: Any?) {
@@ -21,11 +24,19 @@ final class WebViewViewController: UIViewController {
         delegate?.webViewViewControllerDidCancel(self)
     }
     @IBOutlet private var progressView: UIProgressView!
-    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     var delegate: WebViewViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        estimatedProgressObservation = webView.observe(
+                    \.estimatedProgress,
+                    options: [],
+                    changeHandler: { [weak self] _, _ in
+                        guard let self = self else { return }
+                        self.updateProgress()
+        })
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: AccessKey),
@@ -43,30 +54,26 @@ final class WebViewViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
         updateProgress()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
 
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+    
+    func webViewClean() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast) // очищаются cookie веб-браузера
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
 
 }
@@ -79,13 +86,20 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
          if let code = code(from: navigationAction) {
-                //TODO: process code
+             
              authService.fetchOAuthToken(code) { result in
                  switch result {
                      case .success(let bearerToken):
-                     self.storage.token = bearerToken
+                     let token = bearerToken
+                     let isSuccess = KeychainWrapper.standard.set(token, forKey: "Auth token")
+                     guard isSuccess else {
+                         // ошибка
+                         return
+                     }
                      self.delegate?.webViewViewControllerDidCancel(self)
-                     self.switchToTabBarController()
+                     
+//                     self.switchToTabBarController()
+                     self.switchToSplashScreen()
                      case .failure(let error):
                          print(error.localizedDescription)
                      }
@@ -107,6 +121,18 @@ extension WebViewViewController: WKNavigationDelegate {
            
         // Установим в `rootViewController` полученный контроллер
         window.rootViewController = tabBarController
+    }
+    
+    
+    func switchToSplashScreen() {
+        // Получаем экземпляр `Window` приложения
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        
+        // Cоздаём экземпляр нужного контроллера из Storyboard с помощью ранее заданного идентификатора.
+        let splashScreenViewController = SplashScreenViewController()
+           
+        // Установим в `rootViewController` полученный контроллер
+        window.rootViewController = splashScreenViewController
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
