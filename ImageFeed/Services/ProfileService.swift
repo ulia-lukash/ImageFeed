@@ -43,34 +43,6 @@ final class ProfileService {
     }
 }
 
-struct ProfileResult: Codable {
-    let username: String
-    let firstName: String
-    let lastName: String?
-    let bio: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case username
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case bio
-    }
-}
-
-struct Profile {
-    var username: String
-    var name: String
-    var loginName: String
-    var bio: String?
-    
-    init(result: ProfileResult) {
-            self.username = result.username
-            self.name = ("\(result.firstName) \(result.lastName ?? "")")
-            self.loginName = "@\(result.username)"
-            self.bio = ("\(result.bio ?? "")")
-        }
-}
-
 extension ProfileService {
     
     private func makeRequest(token: String) -> URLRequest {
