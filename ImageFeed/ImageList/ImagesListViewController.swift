@@ -31,17 +31,15 @@ final class ImagesListViewController: UIViewController {
                     guard let self = self else { return }
                     self.updateTableViewAnimated()
                 }
-        if let token = KeychainWrapper.standard.string(forKey: "Auth token") {
-            imageListService.fetchPhotosNextPage()
-        }
+        guard let token = KeychainWrapper.standard.string(forKey: "Auth token") else { return }
+        imageListService.fetchPhotosNextPage()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowSingleImage" {
             let viewController = segue.destination as! SingleImageViewController
-            let cell = sender as! ImagesListCell
-            let imageIndex = cell.imageIndex
-            let fullImageURL = photos[imageIndex!].fullImageURL
+            let indexPath = sender as! IndexPath
+            let fullImageURL = photos[indexPath.row].fullImageURL
             viewController.fullImageURL = fullImageURL
         } else {
             super.prepare(for: segue, sender: sender) // 6
@@ -60,7 +58,6 @@ final class ImagesListViewController: UIViewController {
         guard let stubImage = UIImage(named: "Stub") else { return }
         let imageUrl = photos[indexPath.row].smallImageURL
         guard let url = URL(string: imageUrl) else { return }
-        cell.imageIndex = indexPath.row
         cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.setImage(with: url, placeholder: stubImage) { [weak self] _ in
             guard let self = self else { return }

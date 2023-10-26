@@ -21,12 +21,15 @@ final class TabBarController: UITabBarController {
         
         // - TODO: констрейнты для картинок, а то уплыли вверх (может, они тоже в детстве хотели быть космонавтами?)
         
+//        profileViewController.translatesAutoresizingMaskIntoConstraints = false
+//        profileViewController.topAnchor.constraint(equalTo: tabBarController.topAnchor, constant: 10)
         profileViewController.tabBarItem = UITabBarItem(
                     title: nil,
                     image: UIImage(named: "tab_profile_active"),
                     selectedImage: nil
                 )
         imagesListViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "tab_editorial_active"), selectedImage: nil)
+        
        self.viewControllers = [imagesListViewController, profileViewController]
     }
 }
