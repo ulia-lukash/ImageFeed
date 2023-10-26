@@ -68,7 +68,7 @@ final class WebViewViewController: UIViewController {
     }
     
     func webViewClean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast) // очищаются cookie веб-браузера
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
             records.forEach { record in
                 WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})

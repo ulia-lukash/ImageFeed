@@ -13,6 +13,23 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
+    weak var delegate: ImagesListCellDelegate? 
+    var imageIndex: Int!
+    @IBAction func likeButtonClicked(_ sender: Any) {
+        delegate?.imageListCellDidTapLike(self)
+    }
     
     static let reuseIdentifier = "ImagesListCell"
+    
+    func setIsLiked(isLiked: Bool) {
+        let likeIndicatorImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        likeButton.setImage(likeIndicatorImage, for: .normal)
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+}
+
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
 }

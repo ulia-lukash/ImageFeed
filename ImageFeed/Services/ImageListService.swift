@@ -57,13 +57,17 @@ class ImageListService {
                 size: CGSize(width: item.width, height: item.height),
                 createdAt: dateFormatter.date(from: item.createdAt!),
                 welcomeDescription: item.description,
+                rawImageURL: item.urls.raw,
+                smallImageURL: item.urls.small,
                 thumbImageURL: item.urls.thumb,
-                largeImageURL: item.urls.full,
+                fullImageURL: item.urls.full,
+                regularImageURL: item.urls.regular,
                 isLiked: item.likedByUser)
         }
-        print(newPhotos)
         self.photos.append(contentsOf: newPhotos)
     }
+    
+
 }
 
 extension ImageListService {
@@ -83,4 +87,49 @@ extension ImageListService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+}
+
+extension ImageListService {
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        guard let token = KeychainWrapper.standard.string(forKey: "Auth token") else {
+            return assertionFailure("Error like request")}
+        let method = isLike ?  "POST" : "DELETE"
+        var request = URLRequest.makeHTTPRequest(
+            path: "/photos/\(photoId)/like",
+            httpMethod: method,
+            baseURL: DefaultBaseURL)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success(_):
+                if let index = self.photos.firstIndex(where: {$0.id == photoId}) {
+                    let photo = self.photos[index]
+                    let newPhoto = Photo(
+                        id: photo.id,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        welcomeDescription: photo.welcomeDescription,
+                        rawImageURL: photo.rawImageURL,
+                        smallImageURL: photo.smallImageURL,
+                        thumbImageURL: photo.thumbImageURL,
+                        fullImageURL: photo.fullImageURL,
+                        regularImageURL: photo.regularImageURL,
+                        isLiked: !photo.isLiked)
+                    self.photos[index] = newPhoto
+                }
+                completion (.success(()))
+            case .failure(let error):
+                completion (.failure(error))
+            }
+        }
+        task.resume()
+    }
+}
+
+
+struct LikeResult: Decodable {
+    let photo: PhotoResult
 }
