@@ -11,11 +11,9 @@ import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet weak var shareButton: UIButton!
-    var fullImageURL: String!
+    // MARK: - Public Properties
     
+    var fullImageURL: String!
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
@@ -24,6 +22,14 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
+    // MARK: - IBOutlet
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet weak var shareButton: UIButton!
+    
+    // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,8 +37,27 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
         imageView.image = image
         showImage()
-        
     }
+    
+    // MARK: - Public Methods
+    
+    func showImage() {
+        UIBlockingProgressHUD.show()
+        let url = URL(string: fullImageURL)
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let image):
+                
+                self.rescaleAndCenterImageInScrollView(image: image.image)
+            case .failure:
+                self.showErrorAlert()
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
+    }
+    
+    // MARK: - IBAction
     
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
@@ -46,6 +71,7 @@ final class SingleImageViewController: UIViewController {
         present(share, animated: true, completion: nil)
     }
     
+    // MARK: - Private Methods
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
@@ -64,21 +90,6 @@ final class SingleImageViewController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
     
-    func showImage() {
-        UIBlockingProgressHUD.show()
-        let url = URL(string: fullImageURL)
-        imageView.kf.setImage(with: url) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let image):
-                
-                self.rescaleAndCenterImageInScrollView(image: image.image)
-            case .failure:
-                self.showErrorAlert()
-            }
-            UIBlockingProgressHUD.dismiss()
-        }
-    }
     private func showErrorAlert() {
         let alert = UIAlertController(
             title: "Что-то пошло не так",
@@ -99,8 +110,8 @@ final class SingleImageViewController: UIViewController {
         alert.addAction(retryAction)
         self.present(alert, animated: true)
     }
-    
 }
+
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView

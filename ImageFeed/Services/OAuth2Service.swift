@@ -8,14 +8,16 @@
 import Foundation
 import SwiftKeychainWrapper
 
+
 final class OAuth2Service {
     
+    // MARK: - Public Properties
     static let shared = OAuth2Service()
-    private let urlSession = URLSession.shared
     
+    // MARK: - Private Properties
+    private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
-    
     private (set) var authToken: String {
         get {
             return KeychainWrapper.standard.string(forKey: "Auth token") ?? ""
@@ -28,7 +30,8 @@ final class OAuth2Service {
             }
         }
     }
-    
+
+    // MARK: - Public Methods
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void ){
         assert(Thread.isMainThread)
         if lastCode == code { return }
@@ -48,8 +51,7 @@ final class OAuth2Service {
         }
         task.resume()
     }
-    
-    
+    // MARK: - Private Methods
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
@@ -61,14 +63,11 @@ final class OAuth2Service {
             httpMethod: "POST",
             baseURL: URL(string: "https://unsplash.com")!
         ) }
-    
-    
-    
-    
 }
 
-
 extension URLRequest {
+    
+    // MARK: - Public Methods
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
@@ -80,11 +79,7 @@ extension URLRequest {
     }
 }
 
-enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-    case urlSessionError
-}
+
 
 extension URLSession {
     func objectTask<T: Decodable>(
@@ -123,4 +118,10 @@ extension URLSession {
         return task
     }
     
+}
+
+enum NetworkError: Error {
+    case httpStatusCode(Int)
+    case urlRequestError(Error)
+    case urlSessionError
 }

@@ -12,10 +12,14 @@ import SwiftKeychainWrapper
 
 final class SplashScreenViewController: UIViewController {
     
+    // MARK: - Private Properties
+    
     private let oauth2Service = OAuth2Service()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var isFirstLaunch = true
+
+    // MARK: - UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +42,8 @@ final class SplashScreenViewController: UIViewController {
         
     }
     
+    // MARK: - Private Methods
+    
     private func addImage(view: UIView) {
         let image = UIImage(named: "Logo")
         let imageView = UIImageView(image: image)
@@ -50,8 +56,7 @@ final class SplashScreenViewController: UIViewController {
             imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-    
-}
+ }
 
 extension SplashScreenViewController {
     
@@ -69,6 +74,9 @@ extension SplashScreenViewController {
 }
 
 extension SplashScreenViewController: AuthViewControllerDelegate {
+    
+    // MARK: - Public Methods
+    
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         
         dismiss(animated: true) { [weak self] in
@@ -78,6 +86,8 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
         }
         
     }
+    
+    // MARK: - Private Methods
     
     private func fetchOAuthToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
@@ -108,9 +118,7 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
             }
         }
     }
-    
-    
-    
+
     private func showAlertProfile(with errorFetchProfile: Error) {
         let alert = UIAlertController(
             title: "Что-то пошло не так",

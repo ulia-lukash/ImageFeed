@@ -10,14 +10,18 @@ import SwiftKeychainWrapper
 
 final class ProfileImageService {
     
+    // MARK: - Public Properties
+    static let shared = ProfileImageService()
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    
+    // MARK: - Private Properties
     private (set) var avatarURL: String?
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private let decoder = JSONDecoder()
     private var lastUserName: String?
-    static let shared = ProfileImageService()
-    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
+    // MARK: - Public Methods
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         if lastUserName == username {return}
@@ -37,7 +41,7 @@ final class ProfileImageService {
                     .post(
                         name: ProfileImageService.didChangeNotification,
                         object: self,
-                        userInfo: ["URL": profileImageURL])   
+                        userInfo: ["URL": profileImageURL])
             case .failure(let error):
                 completion(.failure(error))
                 self.lastUserName = nil
@@ -48,6 +52,7 @@ final class ProfileImageService {
         task.resume()
     }
     
+    // MARK: - Private Methods
     private func makeRequest(username: String) -> URLRequest {
         
         var urlComponents = URLComponents()
@@ -64,7 +69,7 @@ final class ProfileImageService {
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
-    }
+    }    
 }
 
 

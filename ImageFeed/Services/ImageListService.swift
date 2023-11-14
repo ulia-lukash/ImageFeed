@@ -10,15 +10,18 @@ import SwiftKeychainWrapper
 
 class ImageListService {
     
+    // MARK: - Public Properties
     static let shared = ImageListService()
+    static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    
+    // MARK: - Private Properties
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private let dateFormatter = ISO8601DateFormatter()
-    static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-    // ...
     
+    // MARK: - Public Methods
     func fetchPhotosNextPage() {
         
         assert(Thread.isMainThread)
@@ -67,8 +70,6 @@ class ImageListService {
         }
         self.photos.append(contentsOf: newPhotos)
     }
-    
-    
 }
 
 extension ImageListService {

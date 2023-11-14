@@ -265,7 +265,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="progressView" destination="evC-4C-oLu" id="nxL-wb-9kI"/>
+                        <outlet property="progressView" destination="evC-4C-oLu" id="JU6-XC-a0I"/>
                         <outlet property="webView" destination="cWy-x5-Ox0" id="brL-ha-eAm"/>
                     </connections>
                 </viewController>

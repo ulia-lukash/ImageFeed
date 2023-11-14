@@ -10,14 +10,20 @@ import UIKit
 import Kingfisher
 import SwiftKeychainWrapper
 
+// MARK: - Types
+
 public protocol ProfileViewControllerProtocol {
     var presenter: ProfileViewPresenterProtocol? { get set }
     func setProfile()
 }
 
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    
+    // MARK: - Public Properties
+    
     var presenter: ProfileViewPresenterProtocol?
     
+    // MARK: - Private Properties
     
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -27,6 +33,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     private let webVVC = WebViewViewController.shared
     private let profileImageService = ProfileImageService.shared
     
+    // MARK: - UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +43,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         setProfile()
         presenter = ProfileViewPresenter()
     }
+    
+    // MARK: - ProfileViewControllerProtocol
     
     // - TODO: Разобрать Мегалодона на что-то более поворотливое... акулы-няньки?
     internal func setProfile() {
@@ -155,6 +164,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             
         }
     }
+    
+    // MARK: - Private Methods
     
     @objc
     

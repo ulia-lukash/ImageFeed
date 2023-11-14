@@ -8,29 +8,43 @@
 import Foundation
 import UIKit
 
+// MARK: - Types
+
 protocol ImagesListCellDelegate: AnyObject {
     func imageListCellDidTapLike(_ cell: ImagesListCell)
 }
 
 final class ImagesListCell: UITableViewCell {
     
+    // MARK: - Public Properties
+    
+    static let reuseIdentifier = "ImagesListCell"
+    weak var delegate: ImagesListCellDelegate?
+    
+    // MARK: - IBOutlet
+    
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
-    weak var delegate: ImagesListCellDelegate? 
-    @IBAction func likeButtonClicked(_ sender: Any) {
-        delegate?.imageListCellDidTapLike(self)
+    
+    // MARK: - UITableViewCell
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
     }
     
-    static let reuseIdentifier = "ImagesListCell"
+    // MARK: - Public Methods
     
     func setIsLiked(isLiked: Bool) {
         let likeIndicatorImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         likeButton.setImage(likeIndicatorImage, for: .normal)
     }
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
+    
+    // MARK: - IBAction
+    
+    @IBAction func likeButtonClicked(_ sender: Any) {
+        delegate?.imageListCellDidTapLike(self)
+    } 
 }
 
 

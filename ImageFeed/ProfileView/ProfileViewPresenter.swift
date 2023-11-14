@@ -8,14 +8,24 @@
 import UIKit
 import SwiftKeychainWrapper
 
+// MARK: - Types
+
 public protocol ProfileViewPresenterProtocol {
     var view: ProfileViewControllerProtocol? { get set }
     func exitProfile()
 }
 
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
+    
+    // MARK: - Public Properties
+    
     var view: ProfileViewControllerProtocol?
+    
+    // MARK: - Private Properties
+    
     private let webVVC = WebViewViewController()
+    
+    // MARK: - ProfileViewPresenterProtocol
     
     func exitProfile(){
         

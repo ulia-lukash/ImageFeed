@@ -9,14 +9,17 @@ import Foundation
 
 final class ProfileService {
     
+    // MARK: - Public Properties
     static let shared = ProfileService()
-    private(set) var profile: Profile?
     
+    // MARK: - Private Properties
+    private(set) var profile: Profile?
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private let decoder = JSONDecoder()
     private var lastCode: String?
     
+    // MARK: - Public Methods
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
         if lastCode == token {return}

@@ -10,6 +10,8 @@ import UIKit
 import WebKit
 import SwiftKeychainWrapper
 
+// MARK: - Types
+
 protocol WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
@@ -24,21 +26,26 @@ public protocol WebViewViewControllerProtocol: AnyObject {
 
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
     
+    // MARK: - Public Properties
+
     var presenter: WebViewPresenterProtocol?
     let authService = OAuth2Service()
     let profileService = ProfileService.shared
     static let shared = WebViewViewController()
-    
+    var delegate: WebViewViewControllerDelegate?
+
+    // MARK: - IBOutlet
     
     @IBOutlet private var webView: WKWebView!
-    @IBAction private func didTapBackButton(_ sender: Any?) {
-        
-        delegate?.webViewViewControllerDidCancel(self)
-    }
     @IBOutlet private var progressView: UIProgressView!
-    private var estimatedProgressObservation: NSKeyValueObservation?
-    var delegate: WebViewViewControllerDelegate?
     
+    // MARK: - Private Properties
+
+    private var estimatedProgressObservation: NSKeyValueObservation?
+    // MARK: - Initializers
+
+    // MARK: - UIViewController
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,7 +68,8 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         super.viewWillDisappear(animated)
     }
     
-    
+    // MARK: - Public Methods
+
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
@@ -82,9 +90,18 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func load(request: URLRequest) {
         webView.load(request)
     }
+    
+    // MARK: - IBAction
+
+    @IBAction private func didTapBackButton(_ sender: Any?) {
+        
+        delegate?.webViewViewControllerDidCancel(self)
+    }
 }
 
 extension WebViewViewController: WKNavigationDelegate {
+    
+    // MARK: - Public Methods
     
     func webView(
         _ webView: WKWebView,
@@ -115,7 +132,6 @@ extension WebViewViewController: WKNavigationDelegate {
         
     }
     
-    
     func switchToSplashScreen() {
         // Получаем экземпляр `Window` приложения
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
@@ -126,6 +142,8 @@ extension WebViewViewController: WKNavigationDelegate {
         // Установим в `rootViewController` полученный контроллер
         window.rootViewController = splashScreenViewController
     }
+    
+    // MARK: - Private Methods
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url {

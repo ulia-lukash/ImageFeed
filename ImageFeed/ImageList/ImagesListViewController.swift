@@ -11,11 +11,30 @@ import SwiftKeychainWrapper
 
 
 final class ImagesListViewController: UIViewController {
+    
+    // MARK: - Public Properties
+    
+    var photos: [Photo] = []
+    
+    // MARK: - IBOutlet
+    
+    @IBOutlet private var tableView: UITableView!
+    
+    // MARK: - Private Properties
+    
     private var imageListServiceObserver: NSObjectProtocol?
     private let imageListService = ImageListService.shared
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
-    var photos: [Photo] = []
-    @IBOutlet private var tableView: UITableView!
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        return formatter
+    }()
+    
+    // MARK: - Initializers
+    
+    // MARK: - UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,13 +65,7 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
+    // MARK: - Public Methods
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let stubImage = UIImage(named: "Stub") else { return }
@@ -104,7 +117,6 @@ extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photos.count
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
