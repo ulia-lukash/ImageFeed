@@ -10,8 +10,14 @@ import UIKit
 import Kingfisher
 import SwiftKeychainWrapper
 
+public protocol ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func setProfile()
+}
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
+    
     
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -20,7 +26,7 @@ final class ProfileViewController: UIViewController {
     private var profileBioLabel: UILabel?
     private let webVVC = WebViewViewController.shared
     private let profileImageService = ProfileImageService.shared
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +34,11 @@ final class ProfileViewController: UIViewController {
             self.profileImageService.fetchProfileImageURL(username: username) { _ in }
         }
         setProfile()
+        presenter = ProfileViewPresenter()
     }
     
     // - TODO: Разобрать Мегалодона на что-то более поворотливое... акулы-няньки?
-    private func setProfile() {
+    internal func setProfile() {
         // - Profile pic
         let profileImage = UIImage(named: "placeholder.svg")
         lazy var profileImageView: UIImageView = {
@@ -45,27 +52,27 @@ final class ProfileViewController: UIViewController {
             nameLabel.textColor = UIColor(named: "YP White (iOS)")
             self.nameLabel = nameLabel
             return nameLabel }()
-                
+        
         lazy var loginNameLabel: UILabel = {
             let loginNameLabel = UILabel()
             loginNameLabel.text = "@ekaterina_nov"
             loginNameLabel.textColor = UIColor(named: "YP Gray (iOS)")
             self.loginNameLabel = loginNameLabel
             return loginNameLabel }()
-                
-       lazy var profileBioLabel: UILabel = {
-           let profileBioLabel = UILabel()
-           profileBioLabel.text = "Hello, world!"
-           profileBioLabel.textColor = UIColor(named: "YP White (iOS)")
-           self.profileBioLabel = profileBioLabel
-           return profileBioLabel }()
+        
+        lazy var profileBioLabel: UILabel = {
+            let profileBioLabel = UILabel()
+            profileBioLabel.text = "Hello, world!"
+            profileBioLabel.textColor = UIColor(named: "YP White (iOS)")
+            self.profileBioLabel = profileBioLabel
+            return profileBioLabel }()
         // - Exit button
         lazy var profileExitButton: UIButton = {
             let profileExitButton = UIButton.systemButton(
                 with: UIImage(systemName: "ipad.and.arrow.forward")!,
                 target: self,
                 action: #selector(Self.didTapExitProfileButton)
-                )
+            )
             profileExitButton.tintColor = UIColor(named: "YP Red (iOS)")
             return profileExitButton }()
         
@@ -74,12 +81,12 @@ final class ProfileViewController: UIViewController {
         updateAvatar()
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
-                   forName: ProfileImageService.didChangeNotification,
-                   object: nil,
-                   queue: .main) { [weak self] _ in
-                       guard self != nil else { return }
-                       updateAvatar()
-                   }
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard self != nil else { return }
+                updateAvatar()
+            }
         
         func addSubviews() {
             view.addSubview(profileBioLabel)
@@ -98,33 +105,33 @@ final class ProfileViewController: UIViewController {
         
         func setConstraints() {
             NSLayoutConstraint.activate([
-            profileBioLabel.widthAnchor.constraint(equalToConstant: 77),
-            profileBioLabel.heightAnchor.constraint(equalToConstant: 18),
-            profileBioLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            profileBioLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 206),
-            loginNameLabel.widthAnchor.constraint(equalToConstant: 99),
-            loginNameLabel.heightAnchor.constraint(equalToConstant: 18),
-
-            loginNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            loginNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180),
-            nameLabel.widthAnchor.constraint(equalToConstant: 241),
-            nameLabel.heightAnchor.constraint(equalToConstant: 18),
-            
-            nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            nameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 154),
-            profileImageView.widthAnchor.constraint(equalToConstant: 70),
-            profileImageView.heightAnchor.constraint(equalToConstant: 70),
-            
-            profileImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            profileImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
-            profileExitButton.widthAnchor.constraint(equalToConstant: 44),
-            profileExitButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            profileExitButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            profileExitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+                profileBioLabel.widthAnchor.constraint(equalToConstant: 77),
+                profileBioLabel.heightAnchor.constraint(equalToConstant: 18),
+                profileBioLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                profileBioLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 206),
+                loginNameLabel.widthAnchor.constraint(equalToConstant: 99),
+                loginNameLabel.heightAnchor.constraint(equalToConstant: 18),
+                
+                loginNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                loginNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180),
+                nameLabel.widthAnchor.constraint(equalToConstant: 241),
+                nameLabel.heightAnchor.constraint(equalToConstant: 18),
+                
+                nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                nameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 154),
+                profileImageView.widthAnchor.constraint(equalToConstant: 70),
+                profileImageView.heightAnchor.constraint(equalToConstant: 70),
+                
+                profileImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                profileImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
+                profileExitButton.widthAnchor.constraint(equalToConstant: 44),
+                profileExitButton.heightAnchor.constraint(equalToConstant: 44),
+                
+                profileExitButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+                profileExitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
             ])
         }
-
+        
         
         func updateProfileDetails(profile: Profile?) {
             guard let profile = profile else {return}
@@ -155,22 +162,12 @@ final class ProfileViewController: UIViewController {
         let alert = UIAlertController(title: "Выход", message: "Выйти из Вашего профиля?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
-            self.exitProfile()
+            self.presenter?.exitProfile()
         }))
         
         alert.addAction(UIAlertAction(title: "Нет", style: .default))
         self.present(alert, animated: true)
     }
-    
-    private func exitProfile(){
-        
-            let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "Auth token")
-            webVVC.webViewClean()
-            guard let window = UIApplication.shared.windows.first else {fatalError("Invalid Configuration")}
-            window.rootViewController = SplashScreenViewController()
-            window.makeKeyAndVisible()
-        }
-    
     
 }
 

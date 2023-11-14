@@ -9,13 +9,12 @@ import UIKit
 import Kingfisher
 import SwiftKeychainWrapper
 
+
 final class ImagesListViewController: UIViewController {
-    
-    
     private var imageListServiceObserver: NSObjectProtocol?
     private let imageListService = ImageListService.shared
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
-     var photos: [Photo] = []
+    var photos: [Photo] = []
     @IBOutlet private var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -31,8 +30,9 @@ final class ImagesListViewController: UIViewController {
                     guard let self = self else { return }
                     self.updateTableViewAnimated()
                 }
-        guard let token = KeychainWrapper.standard.string(forKey: "Auth token") else { return }
+        guard KeychainWrapper.standard.string(forKey: "Auth token") != nil else { return }
         imageListService.fetchPhotosNextPage()
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -97,7 +97,7 @@ extension ImagesListViewController: UITableViewDelegate {
             imageListService.fetchPhotosNextPage()
         }
     }
-
+    
 }
 
 extension ImagesListViewController: UITableViewDataSource {
@@ -108,16 +108,16 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-            
+        
         guard let imageListCell = cell as? ImagesListCell else {
-                return UITableViewCell()
+            return UITableViewCell()
         }
         imageListCell.delegate = self
         configCell(for: imageListCell, with: indexPath)
-            return imageListCell
+        return imageListCell
     }
-
-
+    
+    
 }
 
 extension ImagesListViewController: ImagesListCellDelegate {

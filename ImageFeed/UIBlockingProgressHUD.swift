@@ -24,5 +24,5 @@ final class UIBlockingProgressHUD {
         window?.isUserInteractionEnabled = true
         ProgressHUD.dismiss()
     }
-
+    
 }

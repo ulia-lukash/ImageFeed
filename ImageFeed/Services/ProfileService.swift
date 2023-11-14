@@ -22,24 +22,24 @@ final class ProfileService {
         if lastCode == token {return}
         task?.cancel()
         lastCode = token
-                
+        
         let request = makeRequest(token: token)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>)  in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let profileResult):
-                        self.profile = Profile(result: profileResult)
-                        guard let profile = self.profile else {return}
-                        completion(.success(profile))
-                        self.profile = profile
-                        self.task = nil
-                    case .failure(let error):
-                        completion(.failure(error))
-                        self.lastCode = nil
-                    }
-                }
-                self.task = task
-                task.resume()
+            guard let self = self else { return }
+            switch result {
+            case .success(let profileResult):
+                self.profile = Profile(result: profileResult)
+                guard let profile = self.profile else {return}
+                completion(.success(profile))
+                self.profile = profile
+                self.task = nil
+            case .failure(let error):
+                completion(.failure(error))
+                self.lastCode = nil
+            }
+        }
+        self.task = task
+        task.resume()
     }
 }
 

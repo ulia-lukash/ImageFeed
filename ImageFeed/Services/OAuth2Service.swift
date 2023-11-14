@@ -9,7 +9,7 @@ import Foundation
 import SwiftKeychainWrapper
 
 final class OAuth2Service {
-
+    
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
     
@@ -36,7 +36,7 @@ final class OAuth2Service {
         lastCode = code
         let request = authTokenRequest(code: code)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-        guard let self = self else { return }
+            guard let self = self else { return }
             switch result {
             case .success(let body):
                 let authToken = body.accessToken
@@ -48,23 +48,23 @@ final class OAuth2Service {
         }
         task.resume()
     }
-
+    
     
     private func authTokenRequest(code: String) -> URLRequest {
-            URLRequest.makeHTTPRequest(
-                path: "/oauth/token"
-                + "?client_id=\(AccessKey)"
-                + "&&client_secret=\(SecretKey)"
-                + "&&redirect_uri=\(RedirectURI)"
-                + "&&code=\(code)"
-                + "&&grant_type=authorization_code",
-                httpMethod: "POST",
-                baseURL: URL(string: "https://unsplash.com")!
-    ) }
+        URLRequest.makeHTTPRequest(
+            path: "/oauth/token"
+            + "?client_id=\(AccessKey)"
+            + "&&client_secret=\(SecretKey)"
+            + "&&redirect_uri=\(RedirectURI)"
+            + "&&code=\(code)"
+            + "&&grant_type=authorization_code",
+            httpMethod: "POST",
+            baseURL: URL(string: "https://unsplash.com")!
+        ) }
     
     
     
-   
+    
 }
 
 
@@ -73,11 +73,11 @@ extension URLRequest {
         path: String,
         httpMethod: String,
         baseURL: URL = DefaultBaseURL
-) -> URLRequest {
-    var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
-           request.httpMethod = httpMethod
-           return request
-   }
+    ) -> URLRequest {
+        var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
+        request.httpMethod = httpMethod
+        return request
+    }
 }
 
 enum NetworkError: Error {
@@ -98,11 +98,11 @@ extension URLSession {
         }
         let task = dataTask(with: request, completionHandler: { data, response, error in
             if let data = data,
-                let response = response,
-                let statusCode = (response as? HTTPURLResponse)?.statusCode
+               let response = response,
+               let statusCode = (response as? HTTPURLResponse)?.statusCode
             {
                 if 200 ..< 300 ~= statusCode {
-
+                    
                     do {
                         let decoder = JSONDecoder()
                         let result = try decoder.decode(T.self, from: data)

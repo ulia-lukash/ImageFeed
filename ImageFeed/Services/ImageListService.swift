@@ -23,10 +23,10 @@ class ImageListService {
         
         assert(Thread.isMainThread)
         if task != nil { return }
-                
+        
         let nextPage = lastLoadedPage == nil
-            ? 1
-            : lastLoadedPage! + 1
+        ? 1
+        : lastLoadedPage! + 1
         lastLoadedPage = nextPage
         
         guard let request = makeRequest(path: "/photos?page=\(nextPage)") else {
@@ -35,6 +35,7 @@ class ImageListService {
             guard let self = self else { return }
             switch result {
             case .success(let photoResult):
+                print("!!!!!!!")
                 self.preparePhoto(photoResult)
                 NotificationCenter.default.post(name: ImageListService.DidChangeNotification, object: self, userInfo: ["photos" : self.photos] )
             case .failure(let error):
@@ -45,9 +46,9 @@ class ImageListService {
         self.task = task
         task.resume()
         
-//        Читать и изменять значение массива нужно всегда из одной и той же последовательной очереди, из одного и того же потока. Так как читать массив photos мы будем из main — в методе, реализующем UITableViewDataSource, то и обновление массива должно быть в потоке main.
+        //        Читать и изменять значение массива нужно всегда из одной и той же последовательной очереди, из одного и того же потока. Так как читать массив photos мы будем из main — в методе, реализующем UITableViewDataSource, то и обновление массива должно быть в потоке main.
         
-//        На сервере может быть больше десяти фотографий (например, 100), а каждый ответ на запрос содержит максимум 10 фотографий; чтобы не потерять ранее загруженную информацию — нужно добавлять новые фотографии к уже существующим, а не заменять массив. Добавлять новые фотографии можно и в конец массива, и в его начало; но при добавлении новых объектов в конец массива код для работы с массивом будет немного проще.
+        //        На сервере может быть больше десяти фотографий (например, 100), а каждый ответ на запрос содержит максимум 10 фотографий; чтобы не потерять ранее загруженную информацию — нужно добавлять новые фотографии к уже существующим, а не заменять массив. Добавлять новые фотографии можно и в конец массива, и в его начало; но при добавлении новых объектов в конец массива код для работы с массивом будет немного проще.
     }
     
     func preparePhoto(_ photoResult: [PhotoResult]) {
@@ -67,7 +68,7 @@ class ImageListService {
         self.photos.append(contentsOf: newPhotos)
     }
     
-
+    
 }
 
 extension ImageListService {

@@ -11,18 +11,18 @@ import ProgressHUD
 import SwiftKeychainWrapper
 
 final class SplashScreenViewController: UIViewController {
-
+    
     private let oauth2Service = OAuth2Service()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var isFirstLaunch = true
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "YP Black (iOS)")
         self.addImage(view: self.view)
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let token = KeychainWrapper.standard.string(forKey: "Auth token") else {
@@ -62,7 +62,7 @@ extension SplashScreenViewController {
         // Cоздаём экземпляр нужного контроллера из Storyboard с помощью ранее заданного идентификатора.
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
-           
+        
         // Установим в `rootViewController` полученный контроллер
         window.rootViewController = tabBarController
     }
@@ -98,18 +98,18 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
         profileService.fetchProfile(token) { [weak self] result in
             UIBlockingProgressHUD.dismiss()
             switch result {
-                case .success(let profile):
-// - TODO: вообще вот тут должен, наверное, вызываться метод добычи урлы аватарки, но что-то как-то моторчик не фыр-фыр
-//                self?.profileImageService.fetchProfileImageURL(username: profile.username) { _ in }
-                    print(profile)
-                case .failure(let error):
-                    self?.showAlertProfile(with: error)
-                    break
+            case .success(let profile):
+                // - TODO: вообще вот тут должен, наверное, вызываться метод добычи урлы аватарки, но что-то как-то моторчик не фыр-фыр
+                //                self?.profileImageService.fetchProfileImageURL(username: profile.username) { _ in }
+                print(profile)
+            case .failure(let error):
+                self?.showAlertProfile(with: error)
+                break
             }
         }
     }
     
-
+    
     
     private func showAlertProfile(with errorFetchProfile: Error) {
         let alert = UIAlertController(
@@ -119,7 +119,7 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
         alert.addAction(UIAlertAction(title: "Ок", style: .cancel))
         self.present(alert, animated: true, completion: nil)
     }
-        
+    
     private func showAlertOAuth2Token(with errorFetchOAuth2Token: Error) {
         let alert = UIAlertController(
             title: "Что-то пошло не так",

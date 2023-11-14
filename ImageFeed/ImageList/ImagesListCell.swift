@@ -8,8 +8,12 @@
 import Foundation
 import UIKit
 
-final class ImagesListCell: UITableViewCell {
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
 
+final class ImagesListCell: UITableViewCell {
+    
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
@@ -29,6 +33,4 @@ final class ImagesListCell: UITableViewCell {
     }
 }
 
-protocol ImagesListCellDelegate: AnyObject {
-    func imageListCellDidTapLike(_ cell: ImagesListCell)
-}
+
