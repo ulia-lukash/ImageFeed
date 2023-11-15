@@ -24,9 +24,9 @@ final class SingleImageViewController: UIViewController {
     
     // MARK: - IBOutlet
     
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak private var scrollView: UIScrollView!
+    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet weak private var shareButton: UIButton!
     
     // MARK: - UIViewController
     

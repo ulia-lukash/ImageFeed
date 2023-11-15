@@ -33,7 +33,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     // MARK: - WebViewPresenterProtocol
     
     func viewDidLoad() {
-        let request = authHelper.authRequest()
+        guard let request = authHelper.authRequest() else { return }
         view?.load(request: request)
         didUpdateProgressValue(0)
 

@@ -14,10 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        //        ProgressHUD.animationType = .activityIndicator
-        //        ProgressHUD.colorHUD = .black
-        //        ProgressHUD.colorAnimation = .lightGray
-        // Override point for customization after application launch.
         return true
     }
     
@@ -42,5 +38,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
 }
-
-// - TODO: организовать код, порядок переменных в классах и т.д.

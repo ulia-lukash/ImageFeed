@@ -29,7 +29,7 @@ final class ProfileImageService {
         task?.cancel()
         lastUserName = username
         
-        let request = makeRequest(username: username)
+        guard let request = makeRequest(username: username) else { return }
         let task = urlSession.objectTask(for: request) {[weak self] (result: Result<UserResult, Error>) in
             guard let self = self else {return}
             switch result {
@@ -53,17 +53,17 @@ final class ProfileImageService {
     }
     
     // MARK: - Private Methods
-    private func makeRequest(username: String) -> URLRequest {
+    private func makeRequest(username: String) -> URLRequest? {
         
         var urlComponents = URLComponents()
         urlComponents.path = "/users/\(username)"
         guard let url = urlComponents.url(relativeTo: DefaultBaseURL) else {
             assertionFailure("Failed to create URL for avatar Image")
-            return URLRequest(url: URL(string: "")!)
+            return nil
         }
         guard let token = KeychainWrapper.standard.string(forKey: "Auth token") else {
             assertionFailure("Failed to create Token")
-            return URLRequest(url: URL(string: "")!)
+            return nil
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

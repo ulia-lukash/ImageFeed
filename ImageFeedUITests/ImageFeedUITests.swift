@@ -40,11 +40,14 @@ final class ImageFeedUITests: XCTestCase {
         loginTextField.typeText("ulianalukash@yandex.ru")
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
         
-        // - TODO: автоматический переход к вводу пароля (сейчас клавиатуру в тесте надо опустить вручную, чтоб перейти к вводу пароля, иначе "Хьюстон, у нас проблемы!" (извините)))
+        app.toolbars.buttons["Done"].tap()
+
         let passwordTextField = webView.children(matching: .secureTextField).element // вводим пароль
         passwordTextField.tap()
         passwordTextField.typeText("vawmat-xibhof-cuhTi9")
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
+        
+        app.toolbars.buttons["Done"].tap()
         
         // Нажать кнопку логина
         webViewsQuery.buttons["Login"].tap()
