@@ -31,7 +31,7 @@ class ImageListService {
         ? 1
         : lastLoadedPage! + 1
         lastLoadedPage = nextPage
-                          
+        
         guard let request = makeRequest(path: "/photos?page=\(nextPage)") else {
             return assertionFailure("Нет связи с библиотекой картинок")}
         let task = urlSession.objectTask(for: request) {[weak self] (result: Result<[PhotoResult], Error>) in

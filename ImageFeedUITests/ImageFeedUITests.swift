@@ -9,6 +9,10 @@ import XCTest
 
 final class ImageFeedUITests: XCTestCase {
     
+    // MARK: - Constants
+    
+    let EMAIL = "ulianalukash@yandex.ru"
+    let PASSWORD = "vawmat-xibhof-cuhTi9"
     private let app = XCUIApplication()
     
     override func setUpWithError() throws {
@@ -37,14 +41,14 @@ final class ImageFeedUITests: XCTestCase {
         // Ввести данные (логин и пароль) в форму
         let loginTextField = webView.children(matching: .textField).element // вводим Логин
         loginTextField.tap()
-        loginTextField.typeText("ulianalukash@yandex.ru")
+        loginTextField.typeText(EMAIL)
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
         
         app.toolbars.buttons["Done"].tap()
 
         let passwordTextField = webView.children(matching: .secureTextField).element // вводим пароль
         passwordTextField.tap()
-        passwordTextField.typeText("vawmat-xibhof-cuhTi9")
+        passwordTextField.typeText(PASSWORD)
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
         app.toolbars.buttons["Done"].tap()
@@ -72,7 +76,7 @@ final class ImageFeedUITests: XCTestCase {
         // Поставить лайк в ячейке верхней картинки
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 0)
         let likeButton = cellToLike.buttons["LikeButton"]
-        likeButton.tap()
+        likeButton.tap() 
         XCTAssertTrue(likeButton.waitForExistence(timeout: 5))
         sleep(2)
         // Отменить лайк в ячейке верхней картинки

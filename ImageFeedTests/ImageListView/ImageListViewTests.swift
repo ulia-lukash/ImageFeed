@@ -14,15 +14,21 @@ final class ImageListViewTests: XCTestCase {
     
     func testListPhotosCount() {
         //Given
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
         let imageListService = ImageListService()
-        let presenter = self.expectation(description: "Получаем ответ")
+        
         //When
+        
+        let presenter = self.expectation(description: "Получаем ответ")
+        
         NotificationCenter.default.addObserver(
             forName: ImageListService.DidChangeNotification,
             object: nil,
             queue: .main) { _ in
                 presenter.fulfill()
             }
+        _ = viewController.view
         imageListService.fetchPhotosNextPage()
         wait(for: [presenter], timeout: 5)
         
@@ -31,3 +37,5 @@ final class ImageListViewTests: XCTestCase {
     }
     
 }
+
+

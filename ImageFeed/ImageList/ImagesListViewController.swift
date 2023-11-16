@@ -9,7 +9,9 @@ import UIKit
 import Kingfisher
 import SwiftKeychainWrapper
 
-
+public protocol ImagesListViewControllerProtocol {
+    func viewDidLoad()
+}
 final class ImagesListViewController: UIViewController {
     
     // MARK: - Public Properties
