@@ -10,7 +10,8 @@ import XCTest
 import SwiftKeychainWrapper
 
 // - Токен, если что, вывожу в консоль при получении
-let authToken = "GwZAG7hSaxSU916W0pl_NQ2uh7YadHCwyLzqfJtNxt8"
+
+let AUTHTOKEN = ""
 
 final class ImageListViewTests: XCTestCase {
     
@@ -23,7 +24,7 @@ final class ImageListViewTests: XCTestCase {
 //        TODO: - !!! придумать и реальзовать другие тесты
 //        А можно ли это вообще реальзовать через моковые классы? Мы полуаем код из УРЛы WebView, по которому потом получаем токен, по которому уже дальше совершаем все остальные операции, а получение кода из мока как-то...
         
-        KeychainWrapper.standard.set(authToken, forKey: "Auth token")
+        KeychainWrapper.standard.set(AUTHTOKEN, forKey: "Auth token")
         //When
         
         let presenter = self.expectation(description: "Получаем ответ")

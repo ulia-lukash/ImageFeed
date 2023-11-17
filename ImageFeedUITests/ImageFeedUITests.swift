@@ -11,8 +11,12 @@ final class ImageFeedUITests: XCTestCase {
     
     // MARK: - Constants
     
-    let EMAIL = "ulianalukash@yandex.ru"
-    let PASSWORD = "vawmat-xibhof-cuhTi9"
+    let EMAIL = ""
+    let PASSWORD = ""
+    let NAME = ""
+    let USERNAME = ""
+    let BIO = ""
+    
     private let app = XCUIApplication()
     
     override func setUpWithError() throws {
@@ -109,9 +113,9 @@ final class ImageFeedUITests: XCTestCase {
         // Перейти на экран профиля
         app.tabBars.buttons.element(boundBy: 1).tap()
         // Проверить, что на нём отображаются ваши персональные данные
-        XCTAssertTrue(app.staticTexts["Uliana Lukash"].exists)
-        XCTAssertTrue(app.staticTexts["@uli_lukash"].exists)
-        XCTAssertTrue(app.staticTexts["bum-bum-bio"].exists)
+        XCTAssertTrue(app.staticTexts[NAME].exists)
+        XCTAssertTrue(app.staticTexts[USERNAME].exists)
+        XCTAssertTrue(app.staticTexts[BIO].exists)
         // Нажать кнопку логаута
         sleep(2)
         app.buttons["ipad.and.arrow.forward"].tap()
