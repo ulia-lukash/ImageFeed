@@ -80,7 +80,7 @@ extension ImageListService {
             assertionFailure("token is nil)")
             return nil
         }
-        
+        print("Ваш токен! ---->  " + token)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

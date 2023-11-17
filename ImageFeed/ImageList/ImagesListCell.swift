@@ -18,6 +18,7 @@ final class ImagesListCell: UITableViewCell {
     
     // MARK: - Public Properties
     
+    var photos: [Photo] = []
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImagesListCellDelegate?
     

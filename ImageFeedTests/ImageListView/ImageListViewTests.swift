@@ -10,7 +10,7 @@ import XCTest
 import SwiftKeychainWrapper
 
 // - Токен, если что, вывожу в консоль при получении
-let authToken = "7RqxlNYpub0hpQ0d9ptA3oiv7uaUrB6kShXs54zADE0"
+let authToken = "GwZAG7hSaxSU916W0pl_NQ2uh7YadHCwyLzqfJtNxt8"
 
 final class ImageListViewTests: XCTestCase {
     
