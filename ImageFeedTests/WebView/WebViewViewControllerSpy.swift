@@ -7,8 +7,10 @@
 
 import ImageFeed
 import Foundation
+import WebKit
 
-final class WebViewViewControllerSpy: WebViewViewControllerProtocol {
+
+class WebViewViewControllerSpy: WebViewViewControllerProtocol {
     func setProgressValue(_ newValue: Float) {
         
     }

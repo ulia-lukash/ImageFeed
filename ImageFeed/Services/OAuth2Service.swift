@@ -8,7 +8,6 @@
 import Foundation
 import SwiftKeychainWrapper
 
-
 final class OAuth2Service {
     
     // MARK: - Public Properties
@@ -44,6 +43,7 @@ final class OAuth2Service {
             case .success(let body):
                 let authToken = body.accessToken
                 self.authToken = authToken
+                print("Ваш токен! ---->  " + authToken)
                 completion(.success(authToken))
             case .failure(let error):
                 completion(.failure(error))
