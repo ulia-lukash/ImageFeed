@@ -68,7 +68,7 @@ final class WebViewViewController: UIViewController {
     }
     
     func webViewClean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast) // очищаются cookie веб-браузера
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
             records.forEach { record in
                 WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
@@ -111,17 +111,17 @@ extension WebViewViewController: WKNavigationDelegate {
         
     }
     
-    func switchToTabBarController() {
-        // Получаем экземпляр `Window` приложения
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        
-        // Cоздаём экземпляр нужного контроллера из Storyboard с помощью ранее заданного идентификатора.
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
-           
-        // Установим в `rootViewController` полученный контроллер
-        window.rootViewController = tabBarController
-    }
+//    func switchToTabBarController() {
+//        // Получаем экземпляр `Window` приложения
+//        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+//        
+//        // Cоздаём экземпляр нужного контроллера из Storyboard с помощью ранее заданного идентификатора.
+//        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
+//            .instantiateViewController(withIdentifier: "TabBarViewController")
+//           
+//        // Установим в `rootViewController` полученный контроллер
+//        window.rootViewController = tabBarController
+//    }
     
     
     func switchToSplashScreen() {

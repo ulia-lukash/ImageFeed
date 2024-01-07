@@ -19,14 +19,17 @@ final class TabBarController: UITabBarController {
             
         let profileViewController = ProfileViewController()
         
-        // - TODO: почему-то если задавать картинки кодом, они располагаются слишком высоко...?
+        // - TODO: констрейнты для картинок, а то уплыли вверх (может, они тоже в детстве хотели быть космонавтами?)
         
+//        profileViewController.translatesAutoresizingMaskIntoConstraints = false
+//        profileViewController.topAnchor.constraint(equalTo: tabBarController.topAnchor, constant: 10)
         profileViewController.tabBarItem = UITabBarItem(
                     title: nil,
                     image: UIImage(named: "tab_profile_active"),
                     selectedImage: nil
                 )
         imagesListViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "tab_editorial_active"), selectedImage: nil)
+        
        self.viewControllers = [imagesListViewController, profileViewController]
     }
 }

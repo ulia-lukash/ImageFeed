@@ -29,6 +29,8 @@ final class ProfileViewController: UIViewController {
         }
         setProfile()
     }
+    
+    // - TODO: Разобрать Мегалодона на что-то более поворотливое... акулы-няньки?
     private func setProfile() {
         // - Profile pic
         let profileImage = UIImage(named: "placeholder.svg")
