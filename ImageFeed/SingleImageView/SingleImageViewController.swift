@@ -7,13 +7,14 @@
 
 import Foundation
 import UIKit
-
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var shareButton: UIButton!
+    var fullImageURL: String!
     
     var image: UIImage! {
         didSet {
@@ -25,10 +26,11 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
+        showImage()
         
     }
     
@@ -60,6 +62,42 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    func showImage() {
+        UIBlockingProgressHUD.show()
+        let url = URL(string: fullImageURL)
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let image):
+                
+                self.rescaleAndCenterImageInScrollView(image: image.image)
+            case .failure:
+                self.showErrorAlert()
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
+    }
+    private func showErrorAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Ошибка при загрузке картинки. Попробовать ещё раз?",
+            preferredStyle: .alert
+        )
+        
+        let dismissAction = UIAlertAction(title: "Нет", style: .default ) { _ in
+            alert.dismiss(animated: true)
+        }
+        
+        let retryAction = UIAlertAction(title: "Попробовать еше раз?", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.showImage()
+        }
+        
+        alert.addAction(dismissAction)
+        alert.addAction(retryAction)
+        self.present(alert, animated: true)
     }
     
 }
